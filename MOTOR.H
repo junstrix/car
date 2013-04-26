@@ -8,3 +8,5 @@ extern void mo_right(void);
 extern void mo_mic_right(void);
 extern void mo_left(void);
 extern void mo_mic_left(void);
+extern void Con_ZKB(unsigned int a, unsigned int b,\
+										unsigned int c, unsigned int d);
