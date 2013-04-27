@@ -1,119 +1,183 @@
 #include <REGX52.h>
+#include <intrins.h>  //包含_nop_()函数定义的头文件
 #include "LCD1602.h"
-/*******************主函数**********************************/
-/*uchar string[]=" I LOVE YOU! C51 ";            //这里是要显示的字符*/
-/*void main(void)*/
-/*{*/
- /*uchar *cp;*/
- /*cp=string;*/
- /*LCD_init();*/
- /*while(1)*/
- /*{*/
-  /*LCD_send_command(LCD_CLEAR_SCREEN);*/
-  /*LCD_delay_ms(2);*/
-  /*LCD_disp_string(0,0,cp);*/
-  /*LCD_delay_ms(100);*/
-         /*cp++;*/
-  /*if(*cp=='\0')*/
-  /*{*/
-   /*cp=string;                 //到达字符的尾部时,改变指针,重新指向字符串的头部*/
-  /*}*/
- /*}*/
-/*}*/
-/*********************************************************/
-/**************LCD1602的初始化***************************/
-void LCD_init(void)
+
+unsigned char *str_time = "Time:"; //显示字符菜单   
+unsigned char *str_run = "Run:";
+unsigned char *str_coins = "Coin:";
+unsigned char *str_bottle = "Bot:";
+unsigned char digit[]={"0123456789"}; //定义字符数组显示数字
+
+/*****************************************************
+  函数功能：延时若干毫秒
+  入口参数：n
+ ***************************************************/
+void Delay1ms(unsigned int i)      //延时程序,i是形式参数
 {
- LCD_send_command(LCD_DISPLAY_DOUBLE_LINE);
- LCD_send_command(LCD_AC_AUTO_INCREMENT|LCD_MOVE_DISENABLE);
- LCD_send_command(LCD_DISPLAY_ON|LCD_CURSOR_OFF);
- LCD_send_command(LCD_CLEAR_SCREEN);
+	unsigned int j;
+	for( ;i>0;i--)             //变量i由实际参数传入一个值,因此i不能赋初值
+		for(j=0;j<125;j++)
+			;
 }
-/********************************************************/
- 
-void LCD_check_busy(void)   //检测LCD状态，看它是不是还在忙呢
+
+/*****************************************************
+  函数功能：判断液晶模块的忙碌状态
+  返回值：result。result=1，忙碌;result=0，不忙
+ ***************************************************/
+unsigned char BusyTest(void)
 {
- do
-  {
-   LCD_EN=0;
-   LCD_RS=0;
-   LCD_RW=1;
-   LCDIO=0xff;
-   LCD_EN=1;
-   }
-   while(LCD_BUSY==1);
-  
-    LCD_EN=0;
+	bit result;
+	LCD_RS=0;       //根据规定，RS为低电平，RW为高电平时，可以读状态
+	LCD_RW=1;
+	LCD_EN=1;        //E=1，才允许读写
+	_nop_();   //空操作
+	_nop_();
+	_nop_(); 
+	_nop_();   //空操作四个机器周期，给硬件反应时间	
+	result=LCD_BUSY;  //将忙碌标志电平赋给result
+	LCD_EN=0;
+	return result;
 }
-/************LCD1602写命令*******************************/
-void LCD_send_command(uchar command)
+/*****************************************************
+  函数功能：将模式设置指令或显示地址写入液晶模块
+  入口参数：dictate
+ ***************************************************/
+void WriteInstruction (unsigned char dictate)
+{   
+	while(BusyTest()==1); //如果忙就等待
+	LCD_RS=0;                  //根据规定，RS和R/W同时为低电平时，可以写入指令
+	LCD_RW=0;   
+	LCD_EN=0;                   //E置低电平(根据表8-6，写指令时，E为高脉冲，
+	// 就是让E从0到1发生正跳变，所以应先置"0"
+	_nop_();
+	_nop_();             //空操作两个机器周期，给硬件反应时间
+	LCDIO=dictate;            //将数据送入P0口，即写入指令或地址
+	_nop_();
+	_nop_();
+	_nop_();
+	_nop_();               //空操作四个机器周期，给硬件反应时间
+	LCD_EN=1;                   //E置高电平
+	_nop_();
+	_nop_();
+	_nop_();
+	_nop_();               //空操作四个机器周期，给硬件反应时间
+	LCD_EN=0;                  //当E由高电平跳变成低电平时，液晶模块开始执行命令
+}
+/*****************************************************
+  函数功能：指定字符显示的实际地址
+  入口参数：x
+ ***************************************************/
+void WriteAddress(unsigned char x)
 {
- LCD_check_busy();
- LCD_RS=LOW;
- LCD_RW=LOW;
- LCD_EN=HIGH;
- LCDIO=command;
- LCD_EN=LOW;
+	WriteInstruction(x|0x80); //显示位置的确定方法规定为"80H+地址码x"
 }
-/********************************************************/
-/*****************LCD1602写数据**************************/
-void LCD_send_data(uchar dat)
+/*****************************************************
+  函数功能：将数据(字符的标准ASCII码)写入液晶模块
+  入口参数：y(为字符常量)
+ ***************************************************/
+void WriteData(unsigned char y)
 {
- LCD_check_busy();
- LCD_RS=HIGH;
- LCD_RW=LOW;
- LCD_EN=HIGH;
- LCDIO=dat;
- LCD_EN=LOW;
+	while(BusyTest()==1);  
+	LCD_RS=1;           //RS为高电平，RW为低电平时，可以写入数据
+	LCD_RW=0;
+	LCD_EN=0;            //E置低电平(根据表8-6，写指令时，E为高脉冲，
+	// 就是让E从0到1发生正跳变，所以应先置"0"
+	LCDIO=y;           //将数据送入P0口，即将数据写入液晶模块
+	_nop_();
+	_nop_();
+	_nop_();
+	_nop_();       //空操作四个机器周期，给硬件反应时间
+	LCD_EN=1;          //E置高电平
+	_nop_();
+	_nop_();
+	_nop_();
+	_nop_();        //空操作四个机器周期，给硬件反应时间
+	LCD_EN=0;            //当E由高电平跳变成低电平时，液晶模块开始执行命令
 }
-/********************************************************
- void LCD_write_char(uchar x,uchar y,uchar dat)
+/**********************************************
+  显示一个变量的值,运算量过大可能出现问题
+  第一个参数为显示地址，第二参数为显示变量
+ **********************************************/
+void WriteVarData(unsigned char addr, unsigned int x)
 {
-     unsigned char address;
-     if (y == LINE1) 
-         address = LINE1_HEAD + x;
-     else 
-        address = LINE2_HEAD + x;
-     LCD_send_command(address); 
-    LCD_send_data(dat);
+	unsigned char D1,D2,D3,D4,D5;
+	WriteInstruction(addr|0x80); //写入数据显示地址
+	D1=x%10;             //模拟数据采集 D1=x%10;              //计算个位数字
+	D2=(x%100)/10;        //计算十位数字
+	D3=(x%1000)/100;      //计算百位数字
+	D4=(x%10000)/1000;    //计算千位数字
+	D5=x/10000;            //计算万位数字
+	if (x<100) {
+		WriteData(digit[D2]);
+		WriteData(digit[D1]);
+	}
+	else if (x<1000) {
+		WriteData(digit[D3]);
+		WriteData(digit[D2]);
+		WriteData(digit[D1]);
+	}
+	else if (x<10000) {
+		WriteData(digit[D4]);
+		WriteData(digit[D3]);
+		WriteData(digit[D2]);
+		WriteData(digit[D1]);
+	}
+	else
+	{
+		WriteData(digit[D5]);
+		WriteData(digit[D4]);
+		WriteData(digit[D3]);
+		WriteData(digit[D2]);
+		WriteData(digit[D1]);
+	}
 }
-******************LCD1602显示字符串*********************/
-void LCD_disp_string(uchar x,uchar y,uchar *Data)
+
+/*****************************************************
+  函数功能：对LCD的显示模式进行初始化设置
+ ***************************************************/
+void LcdInitiate(void)
 {
- if(y==LINE1)
- {
-  if(x<LINE_LENGTH)
-  {
-   LCD_send_command(LINE1_HEAD+x);
-   for(;x<LINE_LENGTH&&*Data!='\0';x++)
-   {
-    LCD_send_data(*(Data++));
-   }
-   if(*Data!='\0')
-   {
-    x=0;
-    y=LINE2;
-   }
-  }
- }
- if(y==LINE2)
- {
-  LCD_send_command(LINE2_HEAD+x);
-  for(;x<LINE_LENGTH&&*Data!='\0';x++)
-  {
-   LCD_send_data(*(Data++));
-  }
- }
+	Delay1ms(5);             //延时15ms，首次写指令时应给LCD一段较长的反应时间
+	WriteInstruction(0x38);  //显示模式设置：16×2显示，5×7点阵，8位数据接口
+	Delay1ms(2);   //延时5ms　
+	WriteInstruction(0x38);
+	Delay1ms(2);
+	WriteInstruction(0x38);
+	Delay1ms(2);
+	WriteInstruction(LCD_DISPLAY_ON|LCD_CURSOR_OFF|LCD_CURSOR_BLINK_OFF);  //显示模式设置：显示开，无光标，无光标闪烁
+	Delay1ms(2);
+	WriteInstruction(0x06);  //显示模式设置：光标右移，字符不移
+	Delay1ms(2);
+	WriteInstruction(LCD_CLEAR_SCREEN);  //清屏幕指令，将以前的显示内容清除
+	Delay1ms(2);
 }
-/****************************************************************/
-/********************延时函数***********************************/
-  
-/***************************************************************/
-void LCD_delay_ms(uint n)
+/*************************************************************
+ 显示初始化，显示菜单
+ *************************************************************/
+void DisMenuInit(void)
 {
- uint i,j;
- for(i=n;i>0;i--)
-    for(j=0;j<1140;j++)
-    ;
+	LcdInitiate();         //调用LCD初始化函数  
+	Delay1ms(2);
+	WriteInstruction(0x01);//清显示：清屏幕指令
+	WriteAddress(0x00);  // 设置显示位置为第一行的第1个字
+	while(*str_time != '\0')
+	{
+		WriteData(*str_time);
+		str_time++;
+	}
+	WriteAddress(0x09);
+	while(*str_run != '\0'){
+		WriteData(*str_run);
+		str_run++;
+	}
+	WriteAddress(0x40);
+	while(*str_coins != '\0'){
+		WriteData(*str_coins);
+		str_coins++;
+	}
+	WriteAddress(0x49);
+	while(*str_bottle != '\0'){
+		WriteData(*str_bottle);
+		str_bottle++;
+	}
 }
-/*********************************************************************/ 

@@ -33,25 +33,26 @@
 /***********************LCD1602接线引脚定义**************************/
 
 #define LCDIO     P0         //定义P2口与LCD1602的数据口相接
-  sbit   LCD_RS=P2^0;         
-  sbit   LCD_RW=P2^1;         
-  sbit   LCD_EN=P2^2;
-  sbit  LCD_BUSY=LCDIO^7;
- /**********************另外相关的定*********************************/
- #define HIGH               1
- #define LOW                0   
- #define TURE               1
- #define  FALSE             0
- #define  uchar unsigned char
- #define  uint  unsigned int
- 
- /*************************以下是函数的申明部*************************/
- void LCD_init(void);                    //LCD1602初始化
- void LCD_send_command(uchar command);   //
- void LCD_send_data(uchar dat);
- void LCD_write_char(uchar x,uchar y,uchar dat);
- void LCD_disp_string(uchar x,uchar y,char *Data);
- void LCD_delay_ms(uint n);
- void LCD_check_busy(void);
- #endif
- /******************************************************************/
+sbit   LCD_RS=P2^0;         //寄存器选择位，将RS位定义为P2.0引脚
+sbit   LCD_RW=P2^1;         //读写选择位，将RW位定义为P2.1引脚
+sbit   LCD_EN=P2^2;         //使能信号位，将E位定义为P2.2引脚
+sbit   LCD_BUSY=LCDIO^7;    //忙碌标志位，，将BF位定义为P0.7引脚
+/**********************另外相关的定*********************************/
+#define HIGH               1
+#define LOW                0   
+#define TURE               1
+#define  FALSE             0
+#define  uchar unsigned char
+#define  uint  unsigned int
+
+/*************************以下是函数的申明部*************************/
+extern unsigned char BusyTest(void);
+extern void WriteInstruction (unsigned char dictate);
+extern void WriteAddress(unsigned char x);
+extern void WriteData(unsigned char y);
+extern void LcdInitiate(void);
+extern void Delay1ms(unsigned int);
+extern void WriteVarData(unsigned char , unsigned int);
+extern void DisMenuInit(void);
+#endif
+/******************************************************************/

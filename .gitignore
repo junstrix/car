@@ -21,3 +21,5 @@ JLinkLog.txt
 *.M51
 *.swp
 car
+INC/
+tags

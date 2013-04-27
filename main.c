@@ -1,5 +1,6 @@
 #include <REGX52.h>
 #include <stdio.h>
+#include <ctype.h>
 #include "main.h"
 #include "LCD1602.h"
 #include "motor.h"
@@ -10,14 +11,18 @@ unsigned int ZKB1,ZKB2,ZKB3,ZKB4;
 void main(void)
 {
 	init_sys();
-	Con_ZKB(10,990,40,960);
+	DisMenuInit();
 	while(1){
-		if (ZKB1>999) ZKB1=1; 
-		if (ZKB1<1) ZKB1=999; 
-		if (ZKB3>999) ZKB3=1; 
-		if (ZKB3<1) ZKB3=999;
-		printf ("%d,%d,%d,%d\n",ZKB1,ZKB2,ZKB3,ZKB4);
+		mo_forword();
+		WriteVarData(0x05,ZKB1);
+		WriteVarData(0x0C,ZKB2);
+		WriteVarData(0x45,ZKB3);
+		WriteVarData(0x4C,ZKB4);
 	}
+	/*while(1){*/
+		/*mo_forword();*/
+		/*printf("%d,%d,%d,%d\n",ZKB1,ZKB2,ZKB3,ZKB4);*/
+	/*}*/
 }
 
 void init_sys(void)            /*系统初始化函数*/ 
