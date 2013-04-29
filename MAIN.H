@@ -1,6 +1,6 @@
 #define V_TH0  0XFF                  
 #define V_TL0  0XF6                  
-#define V_TMOD 0X21
+#define V_TMOD 0X01
 
 #define uint unsigned int
 #define uchar unsigned char

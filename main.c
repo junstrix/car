@@ -1,5 +1,4 @@
 #include <REGX52.h>
-#include <stdio.h>
 #include "main.h"
 #include "LCD1602.h"
 #include "motor.h"
@@ -16,17 +15,12 @@ void main(void)
 	DisMenuInit();
 	while(1){
 		mo_forword();
-		ClearVarData();
-		WriteVarData(0x05,ZKB1);
-		WriteVarData(0x0d,ZKB2);
-		WriteVarData(0x45,ZKB3);
-		WriteVarData(0x4d,ZKB4);
-		mo_back();
-		ClearVarData();
-		WriteVarData(0x05,ZKB1);
-		WriteVarData(0x0d,ZKB2);
-		WriteVarData(0x45,ZKB3);
-		WriteVarData(0x4d,ZKB4);
+		if (CarTurnLeft) {
+			mo_left();
+		}
+		else if (CarTurnRight) {
+			mo_right();
+		}
 	}
 }
 
@@ -39,12 +33,6 @@ void init_sys(void)            /*系统初始化函数*/
 	TR0=1; 
 	ET0=1; 
 	EA=1;  
-	SCON  = 0x50;		        /* SCON: mode 1, 8-bit UART, enable rcvr      */
-	/*TMOD  = 0x20;               [> TMOD: timer 1, mode 2, 8-bit reload        <]*/
-	TL1 = 0XFD;
-	TH1   = 0Xfd;                /* TH1:  reload value for 1200 baud @ 16MHz   */
-	TR1   = 1;                  /* TR1:  timer 1 run                          */
-	TI    = 1; 
 }
 
 void timer0(void) interrupt 1 using 2 
@@ -55,21 +43,20 @@ void timer0(void) interrupt 1 using 2
 	++click; 
 	if (click>=1000)
 		click=0; 
-	if (click<=ZKB1)      /*当小于占空比值时输出低电平，高于时是高电平，从而实现占空比的调整*/ 
-		P1_0=0; 
+	if (click<=ZKB1)      /*当小于占空比值时输出低电平，高于时是高电平，从而实现占空比的调整*/
+		MOTOR_R1=0;
 	else 
-		P1_0=1; 
+		MOTOR_R1=1; 
 	if (click<=ZKB2)                        
-		P1_1=0; 
+		MOTOR_R2=0; 
 	else 
-		P1_1=1;
-	if (click<=ZKB3)      /*当小于占空比值时输出低电平，高于时是高电平，从而实现占空比的调整*/ 
-		P1_2=0; 
+		MOTOR_R2=1;
+	if (click<=ZKB3)      /*当小于占空比值时输出低电平，高于时是高电平，从而实现占空比的调整*/
+		MOTOR_L1=0; 
 	else 
-		P1_2=1;
-
+		MOTOR_L1=1;
 	if (click<=ZKB4)                        
-		P1_3=0; 
+		MOTOR_L2=0; 
 	else 
-		P1_3=1;
+		MOTOR_L2=1;
 }
