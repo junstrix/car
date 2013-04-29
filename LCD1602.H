@@ -54,5 +54,6 @@ extern void LcdInitiate(void);
 extern void Delay1ms(unsigned int);
 extern void WriteVarData(unsigned char , unsigned int);
 extern void DisMenuInit(void);
+extern void ClearVarData(void);
 #endif
 /******************************************************************/
