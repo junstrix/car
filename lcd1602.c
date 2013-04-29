@@ -6,6 +6,7 @@ unsigned char *str_time = "Time:"; //显示字符菜单
 unsigned char *str_run = "Run:";
 unsigned char *str_coins = "Coin:";
 unsigned char *str_bottle = "Bot:";
+unsigned char Nchar[]=" "; //空字符
 unsigned char digit[]={"0123456789"}; //定义字符数组显示数字
 
 /*****************************************************
@@ -94,6 +95,27 @@ void WriteData(unsigned char y)
 	_nop_();        //空操作四个机器周期，给硬件反应时间
 	LCD_EN=0;            //当E由高电平跳变成低电平时，液晶模块开始执行命令
 }
+/*清空菜单显示变量的*/
+void ClearVarData(void)
+{
+	unsigned char i=0;
+	WriteAddress(0x05);
+	for (i = 0; i < 4; i++) {
+		WriteData(Nchar[0]);
+	}
+	WriteAddress(0x0d);
+	for (i = 0; i < 3; i++) {
+		WriteData(Nchar[0]);
+	}
+	WriteAddress(0x45);
+	for (i = 0; i < 4; i++) {
+		WriteData(Nchar[0]);
+	}
+	WriteAddress(0x4d);
+	for (i = 0; i < 3; i++) {
+		WriteData(Nchar[0]);
+	}
+}
 /**********************************************
   显示一个变量的值,运算量过大可能出现问题
   第一个参数为显示地址，第二参数为显示变量
@@ -156,28 +178,40 @@ void LcdInitiate(void)
  *************************************************************/
 void DisMenuInit(void)
 {
-	LcdInitiate();         //调用LCD初始化函数  
-	Delay1ms(2);
-	WriteInstruction(0x01);//清显示：清屏幕指令
+	/*LcdInitiate();         //调用LCD初始化函数  */
+	/*Delay1ms(2);*/
+	/*WriteInstruction(0x01);//清显示：清屏幕指令*/
+	unsigned int i=0;
 	WriteAddress(0x00);  // 设置显示位置为第一行的第1个字
 	while(*str_time != '\0')
 	{
 		WriteData(*str_time);
 		str_time++;
+		i++;
 	}
+	str_time = str_time - i;
+	i = 0;
 	WriteAddress(0x09);
 	while(*str_run != '\0'){
 		WriteData(*str_run);
 		str_run++;
+		i++;
 	}
+	str_run = str_run - i;
+	i = 0;
 	WriteAddress(0x40);
 	while(*str_coins != '\0'){
 		WriteData(*str_coins);
 		str_coins++;
+		i++;
 	}
+	str_coins = str_coins - i;
+	i = 0;
 	WriteAddress(0x49);
 	while(*str_bottle != '\0'){
 		WriteData(*str_bottle);
 		str_bottle++;
+		i++;
 	}
+	str_bottle = str_bottle - i;
 }

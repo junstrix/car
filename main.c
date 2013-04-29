@@ -1,6 +1,5 @@
 #include <REGX52.h>
 #include <stdio.h>
-#include <ctype.h>
 #include "main.h"
 #include "LCD1602.h"
 #include "motor.h"
@@ -11,18 +10,24 @@ unsigned int ZKB1,ZKB2,ZKB3,ZKB4;
 void main(void)
 {
 	init_sys();
+	LcdInitiate();         //调用LCD初始化函数  
+	Delay1ms(2);
+	WriteInstruction(0x01);//清显示：清屏幕指令
 	DisMenuInit();
 	while(1){
 		mo_forword();
+		ClearVarData();
 		WriteVarData(0x05,ZKB1);
-		WriteVarData(0x0C,ZKB2);
+		WriteVarData(0x0d,ZKB2);
 		WriteVarData(0x45,ZKB3);
-		WriteVarData(0x4C,ZKB4);
+		WriteVarData(0x4d,ZKB4);
+		mo_back();
+		ClearVarData();
+		WriteVarData(0x05,ZKB1);
+		WriteVarData(0x0d,ZKB2);
+		WriteVarData(0x45,ZKB3);
+		WriteVarData(0x4d,ZKB4);
 	}
-	/*while(1){*/
-		/*mo_forword();*/
-		/*printf("%d,%d,%d,%d\n",ZKB1,ZKB2,ZKB3,ZKB4);*/
-	/*}*/
 }
 
 void init_sys(void)            /*系统初始化函数*/ 
