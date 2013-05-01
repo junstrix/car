@@ -1,5 +1,5 @@
-#define V_TH0  0XFF                  
-#define V_TL0  0XF6                  
+#define V_TH0  0XFF                 
+#define V_TL0  0X9C                  
 #define V_TMOD 0X01
 
 #define uint unsigned int
@@ -9,3 +9,6 @@ extern unsigned int ZKB1;
 extern unsigned int ZKB2;
 extern unsigned int ZKB3;
 extern unsigned int ZKB4;
+extern unsigned int count_k;
+extern unsigned char mo_time;
+extern unsigned int total_length;	 //计小车走的距离

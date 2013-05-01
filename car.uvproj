@@ -216,7 +216,7 @@
               <RCB>
                 <Type>0</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0xffff</Size>
               </RCB>
               <RXB>
                 <Type>0</Type>
@@ -388,6 +388,21 @@
               <FileName>main.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\main.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>speedtest</GroupName>
+          <Files>
+            <File>
+              <FileName>speed.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\speed.c</FilePath>
+            </File>
+            <File>
+              <FileName>motorspeed.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\motorspeed.h</FilePath>
             </File>
           </Files>
         </Group>
