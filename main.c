@@ -4,8 +4,6 @@
 #include "motor.h"
 #include "motorspeed.h"
 
-
-
 void init_sys(void);
 unsigned int ZKB1,ZKB2,ZKB3,ZKB4;
 unsigned int count_k=0;
@@ -19,19 +17,32 @@ void main(void)
 	Delay1ms(2);
 	WriteInstruction(0x01);//清显示：清屏幕指令
 	DisMenuInit();
-	Con_ZKB(10,990,40,960);
+	mo_forword();
 	while(1){
-		mo_forword();
-		if (CarTurnLeft) {
+		if (DeviateLeftTrack) {
+			mo_R_forword();
+		}
+		if(DeviateRightTrack)	
+		{
+			mo_L_forword();
+		}
+		if(CarTurnLeft){
 			mo_left();
 		}
-		else if (CarTurnRight) {
+		if (CarTurnRight) {
 			mo_right();
 		}
-		ClearVarData();
-		WriteVarData(0x05,mo_time);
-		WriteVarData(0x0d,total_length);
-		Delay1ms(30);
+		/*mo_forword();*/
+		/*if (CarTurnLeft) {*/
+		/*mo_left();*/
+		/*}*/
+		/*else if (CarTurnRight) {*/
+		/*mo_right();*/
+		/*}*/
+		/*ClearVarData();*/
+		/*WriteVarData(0x05,mo_time);*/
+		/*WriteVarData(0x0d,total_length);*/
+		/*Delay1ms(30);*/
 	}
 }
 
@@ -64,7 +75,7 @@ void timer0(void) interrupt 1 using 2
 		MOTOR_R1=0;
 	else 
 		MOTOR_R1=1; 
-	if (click<=ZKB2)                        
+	if (click<=ZKB2)                     
 		MOTOR_R2=0; 
 	else 
 		MOTOR_R2=1;
@@ -80,14 +91,14 @@ void timer0(void) interrupt 1 using 2
 
 
 /*********************************************************************************************
-外部中断INT0计算电机1的脉冲
+  外部中断INT0计算电机1的脉冲
 /********************************************************************************************/
 void intersvr1(void) interrupt 0 using 1
 {
 	motor1++;		
 }
 /*********************************************************************************************
-外部中断INT1计算电机2的脉冲
+  外部中断INT1计算电机2的脉冲
 /********************************************************************************************/
 void intersvr2(void) interrupt 2 using 3
 {

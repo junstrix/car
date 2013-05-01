@@ -120,26 +120,6 @@ void ClearVarData(void)
   显示一个变量的值,运算量过大可能出现问题
   第一个参数为显示地址，第二参数为显示变量
  **********************************************/
-void ClearVarData(void)
-{
-	unsigned char i=0;
-	WriteAddress(0x05);
-	for (i = 0; i < 4; i++) {
-		WriteData(Nchar[0]);
-	}
-	WriteAddress(0x0d);
-	for (i = 0; i < 3; i++) {
-		WriteData(Nchar[0]);
-	}
-	WriteAddress(0x45);
-	for (i = 0; i < 4; i++) {
-		WriteData(Nchar[0]);
-	}
-	WriteAddress(0x4d);
-	for (i = 0; i < 3; i++) {
-		WriteData(Nchar[0]);
-	}
-}
 void WriteVarData(unsigned char addr, unsigned int x)
 {
 	unsigned char D1,D2,D3,D4,D5;

@@ -6,7 +6,17 @@
 /*两电机同速度向前转动*/
 void mo_forword(void)
 {
-	Con_ZKB(990,10,40,960);
+	Con_ZKB(927,73,100,900);
+}
+/*微右调*/
+void mo_R_forword(void)
+{
+	Con_ZKB(860,140,100,900);
+}
+/*微左调*/
+void mo_L_forword(void)
+{
+	Con_ZKB(950,50,100,900);
 }
 /*两电机同速度向后转动*/
 void mo_back(void)
@@ -16,27 +26,17 @@ void mo_back(void)
 /*停止*/
 void mo_stop(void)
 {
-	Con_ZKB(50,50,50,50);
+	Con_ZKB(500,500,500,500);
 }
 /*向右转,右电机停转，左电机转*/
 void mo_right(void)
 {
-	Con_ZKB(990,10,960,40);
-}
-/*微调右转*/
-void mo_mic_right(void)
-{
-	/* code */
+	Con_ZKB(500,500,100,900);
 }
 /*向左转，左电机停转，右电机转*/
 void mo_left(void)
 {
-	Con_ZKB(10,990,40,960);
-}
-/*微调左转*/
-void mo_mic_left(void)
-{
-	/* code */
+	Con_ZKB(927,73,500,500);
 }
 /*占空比控制,车速，方向等 小数为高电平，大数为低电平*/
 void Con_ZKB(uint a, uint b, uint c, uint d)
