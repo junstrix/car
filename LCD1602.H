@@ -33,10 +33,14 @@
 /***********************LCD1602接线引脚定义**************************/
 
 #define LCDIO     P0         //定义P2口与LCD1602的数据口相接
-sbit   LCD_RS=P2^4;         //寄存器选择位，将RS位定义为P2.0引脚
-sbit   LCD_RW=P2^5;         //读写选择位，将RW位定义为P2.1引脚
-sbit   LCD_EN=P2^6;         //使能信号位，将E位定义为P2.2引脚
-sbit   LCD_BUSY=LCDIO^7;    //忙碌标志位，，将BF位定义为P0.7引脚
+#define LCD_RS P2_4         //寄存器选择位，将RS位定义为P2.0引脚
+#define LCD_RW P2_5         //读写选择位，将RW位定义为P2.1引脚
+#define LCD_EN P2_6         //使能信号位，将E位定义为P2.2引脚
+#define LCD_BUSY P0_7    //忙碌标志位，，将BF位定义为P0.7引脚
+// sbit   LCD_RS=P2^4;         //寄存器选择位，将RS位定义为P2.0引脚
+// sbit   LCD_RW=P2^5;         //读写选择位，将RW位定义为P2.1引脚
+// sbit   LCD_EN=P2^6;         //使能信号位，将E位定义为P2.2引脚
+// sbit   LCD_BUSY=LCDIO^7;    //忙碌标志位，，将BF位定义为P0.7引脚
 /**********************另外相关的定*********************************/
 #define HIGH               1
 #define LOW                0   

@@ -7,6 +7,8 @@
 void init_sys(void);
 unsigned int ZKB1,ZKB2,ZKB3,ZKB4;
 unsigned int count_k=0;
+unsigned int count_coin=0;//硬币数量
+unsigned int count_bottle=0;//瓶子数量
 unsigned char mo_time;
 unsigned int total_length=0;	 //计小车走的距离
 
@@ -28,21 +30,43 @@ void main(void)
 		}
 		if(CarTurnLeft){
 			mo_left();
+			Delay1ms(20);
 		}
 		if (CarTurnRight) {
 			mo_right();
+			Delay1ms(20);
 		}
-		/*mo_forword();*/
-		/*if (CarTurnLeft) {*/
-		/*mo_left();*/
-		/*}*/
-		/*else if (CarTurnRight) {*/
-		/*mo_right();*/
-		/*}*/
-		/*ClearVarData();*/
-		/*WriteVarData(0x05,mo_time);*/
-		/*WriteVarData(0x0d,total_length);*/
-		/*Delay1ms(30);*/
+		if (CHECK_COIN) {
+			Delay1ms(5);
+			if (CHECK_COIN) {
+				mo_stop();
+				Delay1ms(500);
+				mo_forword();
+				Delay1ms(50);       //不能太小，不能太大，太小会冲出跑道，小了会多次检测！
+				if (!CHECK_COIN) {
+					count_coin++;
+				}
+			}
+		}
+		if (UpBottle) {
+			Delay1ms(5);
+			if (NoBottle) {
+				count_bottle++;
+			}
+		}
+		if (DownBottle) {
+			Delay1ms(5);
+			if (NoBottle) {
+				count_bottle++;
+			}
+		}
+		if (count_kk>=50&&count_kk<51) { //变量显示稳定控制
+			ClearVarData();
+			WriteVarData(0x05,mo_time);
+			WriteVarData(0x0d,total_length);
+			WriteVarData(0x45,count_coin);
+			WriteVarData(0x4d,count_bottle);
+		}
 	}
 }
 

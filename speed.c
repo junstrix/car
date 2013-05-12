@@ -1,9 +1,5 @@
-/******************************************************************************************
-  程序名：检查小车行使距离-LCD1602
-  编写人：Yayi
-  论坛：rtrobot.org　　　                                                
- ******************************************************************************************/
 #include "main.h"
+#include "LCD1602.h"
 #include <REGX52.h>
 
 unsigned int motor1=0;	 //计左电机码盘脉冲值
@@ -14,11 +10,12 @@ unsigned int count_kk;
 
 void motorspeeds(void)
 {	
-	if (count_k>=1000)		   //时间到0.1秒
+	if (count_k>=100)		   //时间到0.01秒
 	{
+
 		count_k=0;
 		++count_kk;
-		if(count_kk>=10)			   //时间到1秒
+		if(count_kk>=100)			   //时间到1秒
 		{	
 			count_kk=0;		//重新定义k的值
 			++mo_time;
@@ -30,5 +27,3 @@ void motorspeeds(void)
 		}
 	}
 }
-
-

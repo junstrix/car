@@ -21,7 +21,7 @@ void mo_L_forword(void)
 /*两电机同速度向后转动*/
 void mo_back(void)
 {
-	Con_ZKB(10,990,960,40);
+	Con_ZKB(73,927,900,100);
 }
 /*停止*/
 void mo_stop(void)
