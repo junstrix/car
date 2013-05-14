@@ -46,3 +46,18 @@ void Con_ZKB(uint a, uint b, uint c, uint d)
 	ZKB3 = c;
 	ZKB4 = d;
 }
+/*¿ØÖÆ·äÃùÆ÷ºÍledµÆ
+ * 1 -- on
+ * other -- off
+ */
+void buzzer_led(uchar a)
+{
+	if (a==1) {
+		BUZZER = 0;
+		WARNING_LED = 1;
+	}
+	else {
+		BUZZER = 1;
+		WARNING_LED = 0;
+	}
+}
