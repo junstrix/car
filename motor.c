@@ -3,6 +3,11 @@
 #include "LCD1602.h"
 #include "main.h"
 
+unsigned int motor1=0;	 //计左电机码盘脉冲值
+unsigned int motor2=0;	 //计右电机码盘脉冲值
+unsigned int mo_length1=0;	 //计左电机走的距离
+unsigned int mo_length2=0;	 //计右电机走的距离
+
 /*两电机同速度向前转动*/
 void mo_forword(void)
 {
@@ -46,7 +51,8 @@ void Con_ZKB(uint a, uint b, uint c, uint d)
 	ZKB3 = c;
 	ZKB4 = d;
 }
-/*控制蜂鸣器和led灯
+/*
+ * 控制蜂鸣器和led灯 
  * 1 -- on
  * other -- off
  */
@@ -59,5 +65,39 @@ void buzzer_led(uchar a)
 	else {
 		BUZZER = 1;
 		WARNING_LED = 0;
+	}
+}
+
+/* 测距离 */
+void motorspeeds(void)
+{	
+	if (count_k>=100)		   //时间到0.01秒
+	{
+
+		count_k=0;
+		++count_kk;
+		if(count_kk>=100)			   //时间到1秒
+		{	
+			count_kk=0;		//重新定义k的值
+			++mo_time;
+			mo_length1=motor1;	  //共有21个码盘空隙，轮胎周长21cm，速度等于一秒钟计数码盘空隙/2
+			mo_length2=motor2;
+			total_length+=(motor1+motor2)/2;
+			motor1=0;	 	//重新定义motor1的值
+			motor2=0;		//重新定义motor1的值
+		}
+	}
+}
+
+/* 风扇控制 */
+/* 1 -- on  */
+/* other -- off */
+void motor_fan_con(uchar a)
+{
+	if (a == 1) {
+		MOTOR_FAN = 1;
+	}
+	else {
+		MOTOR_FAN = 0;
 	}
 }

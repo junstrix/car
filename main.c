@@ -1,12 +1,12 @@
 #include <REGX52.h>
-#include "main.h"
 #include "LCD1602.h"
 #include "motor.h"
-#include "motorspeed.h"
+#include "main.h"
 
 void init_sys(void);
 unsigned int ZKB1,ZKB2,ZKB3,ZKB4;
 unsigned int count_k=0;
+unsigned int count_kk;
 unsigned int count_coin=0;//硬币数量
 unsigned int count_bottle=0;//瓶子数量
 unsigned char mo_time;
@@ -14,13 +14,14 @@ unsigned int total_length=0;	 //计小车走的距离
 
 void main(void)
 {
+	motor_fan_con(0);
+	buzzer_led(0);
 	init_sys();
 	LcdInitiate();         //调用LCD初始化函数  
 	Delay1ms(2);
 	WriteInstruction(0x01);//清显示：清屏幕指令
 	DisMenuInit();
 	mo_forword();
-	buzzer_led(0);
 	while(1){
 		if (DeviateLeftTrack) {
 			mo_R_forword();
@@ -56,15 +57,25 @@ void main(void)
 			}
 		}
 		if (UpBottle) {
+			buzzer_led(1);
 			Delay1ms(5);
 			if (NoBottle) {
 				count_bottle++;
+				buzzer_led(0);
 			}
 		}
 		if (DownBottle) {
 			Delay1ms(5);
+			if (DownBottle) {
+				mo_stop();
+				Delay1ms(5);
+				motor_fan_con(1);
+				Delay1ms(100);
+				mo_forword();
+			}
 			if (NoBottle) {
 				count_bottle++;
+				motor_fan_con(0);
 			}
 		}
 		if (count_kk>=50&&count_kk<51) { //变量显示稳定控制

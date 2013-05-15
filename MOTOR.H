@@ -14,19 +14,27 @@
 #define BOTTLE_IO_L P1_6 //瓶子接口(下)
 #define BUZZER P1_7 //蜂鸣器接口
 #define WARNING_LED P3_0 //警示LED灯
+#define MOTOR_FAN P3_1 //风扇接口
 
-#define NoBlockLine (TRACK1==1&&TRACK2==1&&TRACK3==1&&TRACK4==1) ||\
-			    (TRACK1==0&&TRACK2==0&&TRACK3==0&&TRACK4==0)   //同时检测到白线或黑线
-#define DeviateRightTrack TRACK1==1&&TRACK2==1&&TRACK3==0&&TRACK4==1 //车微右斜
-#define DeviateLeftTrack TRACK1==1&&TRACK2==0&&TRACK3==1&&TRACK4==1 //车微左斜
-#define CarTurnLeft (TRACK1==1&&TRACK2==1&&TRACK3==0&&TRACK4==0) ||\  
-			    (TRACK1==1&&TRACK2==0&&TRACK3==0&&TRACK4==0)//遇到左转弯
-#define CarTurnRight (TRACK1==0&&TRACK2==0&&TRACK3==1&&TRACK4==1) ||\
-			     (TRACK1==0&&TRACK2==0&&TRACK3==0&&TRACK4==1)//遇到右转弯
+#define NoBlockLine (TRACK4==1&&TRACK3==1&&TRACK2==1&&TRACK1==1) ||\
+		    (TRACK4==0&&TRACK3==0&&TRACK2==0&&TRACK1==0)   //同时检测到白线或黑线
+#define DeviateRightTrack TRACK4==1&&TRACK3==0&&TRACK2==1&&TRACK1==1 //车微右斜
+#define DeviateLeftTrack  TRACK4==1&&TRACK3==1&&TRACK2==0&&TRACK1==1 //车微左斜
+#define CarTurnLeft (TRACK4==0&&TRACK3==0&&TRACK2==1&&TRACK1==1) ||\  
+		    (TRACK4==0&&TRACK3==0&&TRACK2==0&&TRACK1==1) ||\
+		    (TRACK4==0&&TRACK3==1&&TRACK2==1&&TRACK1==1)//遇到左转弯
+#define CarTurnRight (TRACK4==1&&TRACK3==1&&TRACK2==0&&TRACK1==0) ||\
+	             (TRACK4==1&&TRACK3==0&&TRACK2==0&&TRACK1==0) ||\
+		     (TRACK4==1&&TRACK3==1&&TRACK2==1&&TRACK1==0)//遇到右转弯
 #define CHECK_COIN (COIN_IO==0)//检测有硬币
 #define NoBottle (BOTTLE_IO_H==1&&BOTTLE_IO_L==1)//没有瓶子
 #define UpBottle (BOTTLE_IO_H==0&&BOTTLE_IO_L==0) //正立瓶子
 #define DownBottle (BOTTLE_IO_H==0&&BOTTLE_IO_L==1) //倒立瓶子
+
+extern unsigned int motor1;	 //计左电机码盘脉冲值
+extern unsigned int motor2;	 //计右电机码盘脉冲值
+extern unsigned int mo_length1;	 //计左电机走的距离
+extern unsigned int mo_length2;	 //计右电机走的距离
 
 extern void mo_forword(void);
 extern void mo_back(void);
@@ -38,3 +46,5 @@ extern void Con_ZKB(unsigned int a, unsigned int b,\
 extern void mo_R_forword(void);
 extern void mo_L_forword(void);
 extern void buzzer_led(unsigned char a);
+extern void motorspeeds(void);
+extern void motor_fan_con(unsigned char a);
