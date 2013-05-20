@@ -37,6 +37,7 @@ extern unsigned int mo_length1;	 //计左电机走的距离
 extern unsigned int mo_length2;	 //计右电机走的距离
 
 extern void mo_forword(void);
+extern void mo_forword_slow(void);
 extern void mo_back(void);
 extern void mo_stop(void);
 extern void mo_right(void);
@@ -44,7 +45,9 @@ extern void mo_left(void);
 extern void Con_ZKB(unsigned int a, unsigned int b,\
 		unsigned int c, unsigned int d);
 extern void mo_R_forword(void);
+extern void mo_R_forword_slow(void);
 extern void mo_L_forword(void);
+extern void mo_L_forword_slow(void);
 extern void buzzer_led(unsigned char a);
 extern void motorspeeds(void);
 extern void motor_fan_con(unsigned char a);

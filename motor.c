@@ -13,15 +13,27 @@ void mo_forword(void)
 {
 	Con_ZKB(927,73,100,900);
 }
+void mo_forword_slow(void)
+{
+	Con_ZKB(827,173,200,800);
+}
 /*微右调*/
 void mo_R_forword(void)
 {
 	Con_ZKB(860,140,100,900);
 }
+void mo_R_forword_slow(void)
+{
+	Con_ZKB(800,200,200,800);
+}
 /*微左调*/
 void mo_L_forword(void)
 {
 	Con_ZKB(950,50,100,900);
+}
+void mo_L_forword_slow(void)
+{
+	Con_ZKB(850,150,200,800);
 }
 /*两电机同速度向后转动*/
 void mo_back(void)

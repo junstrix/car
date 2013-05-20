@@ -21,7 +21,29 @@ void main(void)
 	Delay1ms(2);
 	WriteInstruction(0x01);//清显示：清屏幕指令
 	DisMenuInit();
-	mo_forword();
+	mo_forword_slow();
+	while(!CarTurnLeft) {
+		if (DeviateLeftTrack) {
+			mo_R_forword_slow();
+		}
+		if(DeviateRightTrack) {
+			mo_L_forword_slow();
+		}
+		if (CHECK_COIN) {
+			Delay1ms(5);
+			if (CHECK_COIN) {
+				mo_stop();
+				buzzer_led(1);
+				Delay1ms(500);
+				mo_forword_slow();
+				buzzer_led(0);
+				Delay1ms(100);      //不能太小，不能太大，太小会冲出跑道，小了会多次检测！
+				if (!CHECK_COIN) {
+					count_coin++;
+				}
+			}
+		}
+	}
 	while(1){
 		if (DeviateLeftTrack) {
 			mo_R_forword();
@@ -41,20 +63,6 @@ void main(void)
 			buzzer_led(1);
 			Delay1ms(20);
 			buzzer_led(0);
-		}
-		if (CHECK_COIN) {
-			Delay1ms(5);
-			if (CHECK_COIN) {
-				mo_stop();
-				buzzer_led(1);
-				Delay1ms(500);
-				mo_forword();
-				buzzer_led(0);
-				Delay1ms(50);       //不能太小，不能太大，太小会冲出跑道，小了会多次检测！
-				if (!CHECK_COIN) {
-					count_coin++;
-				}
-			}
 		}
 		if (UpBottle) {
 			motor_fan_con(0);
