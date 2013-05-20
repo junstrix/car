@@ -57,21 +57,22 @@ void main(void)
 			}
 		}
 		if (UpBottle) {
+			motor_fan_con(0);
 			buzzer_led(1);
-			Delay1ms(5);
+			Delay1ms(50);
+			buzzer_led(0);
 			if (NoBottle) {
 				count_bottle++;
-				buzzer_led(0);
 			}
 		}
 		if (DownBottle) {
-			Delay1ms(5);
+			Delay1ms(2);
 			if (DownBottle) {
 				mo_stop();
-				Delay1ms(5);
 				motor_fan_con(1);
-				Delay1ms(100);
+				Delay1ms(250);
 				mo_forword();
+				motor_fan_con(0);
 			}
 			if (NoBottle) {
 				count_bottle++;
@@ -96,10 +97,10 @@ void init_sys(void)            /*系统初始化函数*/
 	TL0=V_TL0; 
 	TR0=1; 
 	ET0=1; 
-	EX0 = 1; 		//允许外部中断0中断
-	IT0 = 1; 		//1：下沿触发  0：低电平触发
-	EX1 = 1;
-	IT1	= 1;
+	EX0=1; 		//允许外部中断0中断
+	IT0=1; 		//1：下沿触发  0：低电平触发
+	EX1=1;
+	IT1=1;
 	EA=1; 
 }
 
