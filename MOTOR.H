@@ -20,9 +20,9 @@
 		    (TRACK4==0&&TRACK3==0&&TRACK2==0&&TRACK1==0)   //同时检测到白线或黑线
 #define DeviateRightTrack TRACK4==1&&TRACK3==0&&TRACK2==1&&TRACK1==1 //车微右斜
 #define DeviateLeftTrack  TRACK4==1&&TRACK3==1&&TRACK2==0&&TRACK1==1 //车微左斜
-#define CarTurnLeft (TRACK4==0&&TRACK3==0&&TRACK2==1&&TRACK1==1) ||\  
+#define CarTurnLeft ((TRACK4==0&&TRACK3==0&&TRACK2==1&&TRACK1==1) ||\  
 		    (TRACK4==0&&TRACK3==0&&TRACK2==0&&TRACK1==1) ||\
-		    (TRACK4==0&&TRACK3==1&&TRACK2==1&&TRACK1==1)//遇到左转弯
+		    (TRACK4==0&&TRACK3==1&&TRACK2==1&&TRACK1==1))//遇到左转弯
 #define CarTurnRight (TRACK4==1&&TRACK3==1&&TRACK2==0&&TRACK1==0) ||\
 	             (TRACK4==1&&TRACK3==0&&TRACK2==0&&TRACK1==0) ||\
 		     (TRACK4==1&&TRACK3==1&&TRACK2==1&&TRACK1==0)//遇到右转弯

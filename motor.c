@@ -83,18 +83,17 @@ void buzzer_led(uchar a)
 /* 测距离 */
 void motorspeeds(void)
 {	
-	if (count_k>=100)		   //时间到0.01秒
+	if (count_k>=50)		   //时间到0.01秒
 	{
-
 		count_k=0;
 		++count_kk;
-		if(count_kk>=100)			   //时间到1秒
+		if(count_kk>=200)			   //时间到1秒
 		{	
 			count_kk=0;		//重新定义k的值
 			++mo_time;
-			mo_length1=motor1;	  //共有21个码盘空隙，轮胎周长21cm，速度等于一秒钟计数码盘空隙/2
+			mo_length1=motor1+1;	  //共有21个码盘空隙，轮胎周长21cm，速度等于一秒钟计数码盘空隙/2
 			mo_length2=motor2;
-			total_length+=(motor1+motor2)/2;
+			total_length+=(mo_length1+mo_length2)/2;
 			motor1=0;	 	//重新定义motor1的值
 			motor2=0;		//重新定义motor1的值
 		}

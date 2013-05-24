@@ -37,11 +37,18 @@ void main(void)
 				Delay1ms(500);
 				mo_forword_slow();
 				buzzer_led(0);
-				Delay1ms(100);      //不能太小，不能太大，太小会冲出跑道，小了会多次检测！
+				Delay1ms(130);      //不能太小，不能太大，太小会冲出跑道，小了会多次检测！
 				if (!CHECK_COIN) {
 					count_coin++;
 				}
 			}
+		}
+		if (count_kk>=50&&count_kk<51) { //变量显示稳定控制
+			ClearVarData();
+			WriteVarData(0x05,mo_time);
+			WriteVarData(0x0d,total_length);
+			WriteVarData(0x45,count_coin);
+			WriteVarData(0x4d,count_bottle);
 		}
 	}
 	while(1){
@@ -52,17 +59,33 @@ void main(void)
 		{
 			mo_L_forword();
 		}
-		if(CarTurnLeft){
-			mo_left();
-			buzzer_led(1);
-			Delay1ms(20);
-			buzzer_led(0);
+		if((total_length >= 80 && total_length <= 120) ||\
+				(total_length >= 200 && total_length <= 240) ||\
+				(total_length >= 300 && total_length <= 340)){
+			if(CarTurnLeft){
+				mo_left();
+				buzzer_led(1);
+				Delay1ms(20);
+				buzzer_led(0);
+			}
+			if (CarTurnRight) {
+				mo_right();
+				buzzer_led(1);
+				Delay1ms(20);
+				buzzer_led(0);
+			}
 		}
-		if (CarTurnRight) {
-			mo_right();
-			buzzer_led(1);
-			Delay1ms(20);
-			buzzer_led(0);
+		else {
+			if(CarTurnLeft){
+				mo_left();
+				Delay1ms(20);
+				buzzer_led(0);
+			}
+			if (CarTurnRight) {
+				mo_right();
+				Delay1ms(20);
+				buzzer_led(0);
+			}
 		}
 		if (UpBottle) {
 			motor_fan_con(0);
@@ -86,6 +109,16 @@ void main(void)
 				count_bottle++;
 				motor_fan_con(0);
 			}
+		}
+		if (total_length>=452 || mo_time>=90) {			
+			ClearVarData();
+			WriteVarData(0x05,mo_time);
+			WriteVarData(0x0d,total_length);
+			WriteVarData(0x45,count_coin);
+			WriteVarData(0x4d,count_bottle);
+			mo_stop();
+			EA = 0;
+			for(;;);
 		}
 		if (count_kk>=50&&count_kk<51) { //变量显示稳定控制
 			ClearVarData();
