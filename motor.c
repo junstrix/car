@@ -13,24 +13,27 @@ void mo_forword(void)
 {
 	Con_ZKB(927,73,100,900);
 }
+/*两电机慢速向前转动*/
 void mo_forword_slow(void)
 {
 	Con_ZKB(827,173,200,800);
 }
-/*微右调*/
+/*右调*/
 void mo_R_forword(void)
 {
 	Con_ZKB(860,140,100,900);
 }
+/*微右调*/
 void mo_R_forword_slow(void)
 {
 	Con_ZKB(800,200,200,800);
 }
-/*微左调*/
+/*左调*/
 void mo_L_forword(void)
 {
 	Con_ZKB(950,50,100,900);
 }
+/*微左调*/
 void mo_L_forword_slow(void)
 {
 	Con_ZKB(850,150,200,800);
@@ -63,23 +66,6 @@ void Con_ZKB(uint a, uint b, uint c, uint d)
 	ZKB3 = c;
 	ZKB4 = d;
 }
-/*
- * 控制蜂鸣器和led灯 
- * 1 -- on
- * other -- off
- */
-void buzzer_led(uchar a)
-{
-	if (a==1) {
-		BUZZER = 0;
-		WARNING_LED = 1;
-	}
-	else {
-		BUZZER = 1;
-		WARNING_LED = 0;
-	}
-}
-
 /* 测距离 */
 void motorspeeds(void)
 {	
@@ -99,10 +85,27 @@ void motorspeeds(void)
 		}
 	}
 }
-
-/* 风扇控制 */
-/* 1 -- on  */
-/* other -- off */
+/*
+ * 控制蜂鸣器和led灯 
+ * 1 -- on
+ * other -- off
+ */
+void buzzer_led(uchar a)
+{
+	if (a==1) {
+		BUZZER = 0;
+		WARNING_LED = 1;
+	}
+	else {
+		BUZZER = 1;
+		WARNING_LED = 0;
+	}
+}
+ /*
+  * 风扇控制 
+  * 1 -- on  
+  * other -- off 
+  */
 void motor_fan_con(uchar a)
 {
 	if (a == 1) {

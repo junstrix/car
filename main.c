@@ -21,15 +21,15 @@ void main(void)
 	Delay1ms(2);
 	WriteInstruction(0x01);//清显示：清屏幕指令
 	DisMenuInit();
-	mo_forword_slow();
-	while(!CarTurnLeft) {
+	mo_forword_slow(); //调用慢速档
+	while(!CarTurnLeft) { //AB段行驶
 		if (DeviateLeftTrack) {
 			mo_R_forword_slow();
 		}
 		if(DeviateRightTrack) {
 			mo_L_forword_slow();
 		}
-		if (CHECK_COIN) {
+		if (CHECK_COIN) { //检测硬币
 			Delay1ms(5);
 			if (CHECK_COIN) {
 				mo_stop();
@@ -59,9 +59,10 @@ void main(void)
 		{
 			mo_L_forword();
 		}
-		if((total_length >= 80 && total_length <= 120) ||\
-				(total_length >= 200 && total_length <= 240) ||\
-				(total_length >= 300 && total_length <= 340)){
+		/*转角声控报警之奇淫巧技*/
+		if((total_length >= 80 && total_length <= 110) ||\
+				(total_length >= 190 && total_length <= 230) ||\
+				(total_length >= 300 && total_length <= 360)){
 			if(CarTurnLeft){
 				mo_left();
 				buzzer_led(1);
@@ -87,10 +88,10 @@ void main(void)
 				buzzer_led(0);
 			}
 		}
-		if (UpBottle) {
+		if (UpBottle) { //瓶子检测
 			motor_fan_con(0);
 			buzzer_led(1);
-			Delay1ms(50);
+			Delay1ms(200);
 			buzzer_led(0);
 			if (NoBottle) {
 				count_bottle++;
@@ -110,15 +111,18 @@ void main(void)
 				motor_fan_con(0);
 			}
 		}
-		if (total_length>=452 || mo_time>=90) {			
+		if (total_length>=430||mo_time>=90) { //终点
+			mo_stop();
+			Delay1ms(20);
 			ClearVarData();
 			WriteVarData(0x05,mo_time);
 			WriteVarData(0x0d,total_length);
 			WriteVarData(0x45,count_coin);
 			WriteVarData(0x4d,count_bottle);
-			mo_stop();
 			EA = 0;
-			for(;;);
+			while (1) {
+				mo_stop();
+			}
 		}
 		if (count_kk>=50&&count_kk<51) { //变量显示稳定控制
 			ClearVarData();
